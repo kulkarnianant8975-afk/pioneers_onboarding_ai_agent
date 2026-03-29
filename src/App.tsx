@@ -261,9 +261,9 @@ export default function App() {
   const currentView = user ? activeView : (activeView === 'invoices' ? 'invoices' : 'contracts');
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] font-sans text-zinc-900 pb-20 md:pb-0">
+    <div className="min-h-screen bg-[#F8F9FA] font-sans text-zinc-900 pb-20 md:pb-0 overflow-x-hidden">
       {/* Mobile Bottom Navigation - Visible only on small screens */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-zinc-200 px-6 py-3 flex items-center justify-around z-[90] md:hidden shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-zinc-200 px-6 py-3 flex items-center justify-around z-[110] md:hidden shadow-[0_-4px_20px_rgba(0,0,0,0.05)] pointer-events-auto">
         <button 
           onClick={() => setActiveView('dashboard')}
           className={`flex flex-col items-center gap-1 transition-colors ${currentView === 'dashboard' ? 'text-indigo-600' : 'text-zinc-400'}`}
@@ -295,7 +295,7 @@ export default function App() {
       </nav>
 
       {/* Sidebar - Desktop Only */}
-      <aside className="fixed left-0 top-0 bottom-0 w-64 bg-white border-r border-zinc-200 p-6 hidden md:flex flex-col">
+      <aside className="fixed left-0 top-0 bottom-0 w-64 bg-white border-r border-zinc-200 p-6 hidden md:flex flex-col z-[80]">
         <div className="flex items-center gap-3 mb-10 px-2">
           <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
             <LayoutDashboard className="text-white w-5 h-5" />

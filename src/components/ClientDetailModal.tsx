@@ -36,12 +36,12 @@ export default function ClientDetailModal({ client, onClose, onDelete, onStartOn
         </div>
 
         <div className="p-10 space-y-8">
-          <div className="grid grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
             <div className="space-y-1">
-              <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Email Address</p>
-              <div className="flex items-center gap-2 text-zinc-900 font-bold">
-                <Mail className="w-4 h-4 text-zinc-400" />
-                {client.email}
+              <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest px-1">Email Address</p>
+              <div className="flex items-center gap-2 text-zinc-900 font-bold break-all">
+                <Mail className="w-4 h-4 text-zinc-400 shrink-0" />
+                <span className="truncate md:whitespace-normal">{client.email}</span>
               </div>
             </div>
             <div className="space-y-1">
@@ -85,16 +85,16 @@ export default function ClientDetailModal({ client, onClose, onDelete, onStartOn
             </div>
           </div>
 
-          <div className="flex items-center gap-4 pt-4">
+          <div className="flex flex-col md:flex-row items-center gap-3 md:gap-4 pt-4">
             <button
               onClick={() => onStartOnboarding(client)}
-              className="flex-1 px-8 py-4 bg-indigo-600 text-white rounded-2xl font-bold shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition-all flex items-center justify-center gap-2"
+              className="w-full md:flex-1 px-8 py-4 bg-indigo-600 text-white rounded-2xl font-bold shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition-all flex items-center justify-center gap-2 whitespace-nowrap"
             >
               <ArrowRight className="w-5 h-5" /> Continue Onboarding
             </button>
             <button
               onClick={() => onDelete(client.id)}
-              className="px-8 py-4 bg-rose-50 text-rose-600 rounded-2xl font-bold hover:bg-rose-100 transition-all flex items-center justify-center gap-2"
+              className="w-full md:w-auto px-8 py-4 bg-rose-50 text-rose-600 rounded-2xl font-bold hover:bg-rose-100 transition-all flex items-center justify-center gap-2 whitespace-nowrap"
             >
               <Trash2 className="w-5 h-5" /> Delete Client
             </button>

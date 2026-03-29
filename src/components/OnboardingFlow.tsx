@@ -31,16 +31,16 @@ export default function OnboardingFlow({ client, onUpdate, googleTokens, notionT
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
-      <div className="bg-white rounded-[40px] p-10 border border-zinc-200 shadow-sm">
-        <div className="flex items-center justify-between mb-10">
-          <div className="flex items-center gap-6">
-            <div className="w-16 h-16 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600 shadow-sm border border-indigo-100">
-              <Sparkles className="w-8 h-8" />
+    <div className="max-w-4xl mx-auto space-y-6 md:space-y-8">
+      <div className="bg-white rounded-[32px] md:rounded-[40px] p-6 md:p-10 border border-zinc-200 shadow-sm">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-10 text-center md:text-left">
+          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6">
+            <div className="w-14 h-14 md:w-16 md:h-16 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600 shadow-sm border border-indigo-100">
+              <Sparkles className="w-7 h-7 md:w-8 md:h-8" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold tracking-tight">Onboarding Flow</h2>
-              <p className="text-zinc-500">Managing onboarding for <span className="font-bold text-zinc-900">{client.name}</span></p>
+              <h2 className="text-xl md:text-2xl font-bold tracking-tight">Onboarding Flow</h2>
+              <p className="text-zinc-500 text-sm">Managing onboarding for <span className="font-bold text-zinc-900">{client.name}</span></p>
             </div>
           </div>
           <div className="text-right">
@@ -92,8 +92,8 @@ export default function OnboardingFlow({ client, onUpdate, googleTokens, notionT
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-6">
-        <div className="bg-white p-8 rounded-[32px] border border-zinc-200 shadow-sm flex flex-col items-center text-center gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+        <div className="bg-white p-6 md:p-8 rounded-[24px] md:rounded-[32px] border border-zinc-200 shadow-sm flex flex-col items-center text-center gap-4">
           <div className="w-12 h-12 bg-zinc-50 rounded-xl flex items-center justify-center text-zinc-400">
             <Layout className="w-6 h-6" />
           </div>
@@ -101,7 +101,7 @@ export default function OnboardingFlow({ client, onUpdate, googleTokens, notionT
           <p className="text-xs text-zinc-500">Dedicated workspace for project tracking.</p>
           <button className="mt-2 text-xs font-bold text-indigo-600 hover:underline">Open Workspace</button>
         </div>
-        <div className="bg-white p-8 rounded-[32px] border border-zinc-200 shadow-sm flex flex-col items-center text-center gap-4">
+        <div className="bg-white p-6 md:p-8 rounded-[24px] md:rounded-[32px] border border-zinc-200 shadow-sm flex flex-col items-center text-center gap-4">
           <div className="w-12 h-12 bg-zinc-50 rounded-xl flex items-center justify-center text-zinc-400">
             <FileText className="w-6 h-6" />
           </div>
@@ -109,7 +109,7 @@ export default function OnboardingFlow({ client, onUpdate, googleTokens, notionT
           <p className="text-xs text-zinc-500">Service agreement and payment terms.</p>
           <button className="mt-2 text-xs font-bold text-indigo-600 hover:underline">View Agreement</button>
         </div>
-        <div className="bg-white p-8 rounded-[32px] border border-zinc-200 shadow-sm flex flex-col items-center text-center gap-4">
+        <div className="bg-white p-6 md:p-8 rounded-[24px] md:rounded-[32px] border border-zinc-200 shadow-sm flex flex-col items-center text-center gap-4">
           <div className="w-12 h-12 bg-zinc-50 rounded-xl flex items-center justify-center text-zinc-400">
             <Calendar className="w-6 h-6" />
           </div>
