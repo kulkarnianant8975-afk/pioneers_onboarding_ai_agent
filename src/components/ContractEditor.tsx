@@ -174,67 +174,69 @@ export default function ContractEditor({ isOpen, onClose, initialData, onSave }:
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="bg-white w-full max-w-6xl h-[90vh] rounded-[40px] shadow-2xl flex flex-col overflow-hidden border border-zinc-200"
+        className="bg-white w-full max-w-6xl h-full md:h-[90vh] rounded-none md:rounded-[40px] shadow-2xl flex flex-col overflow-hidden border border-zinc-200"
       >
         {/* Header */}
-        <div className="px-10 py-8 border-b border-zinc-100 flex items-center justify-between bg-zinc-50/50">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-indigo-200">
-              <FileText className="w-6 h-6" />
+        <div className="px-6 md:px-10 py-6 md:py-8 border-b border-zinc-100 flex items-center justify-between bg-zinc-50/50">
+          <div className="flex items-center gap-3 md:gap-4 font-syne">
+            <div className="w-10 h-10 md:w-12 md:h-12 bg-indigo-600 rounded-xl md:rounded-2xl flex items-center justify-center text-white shadow-lg shadow-indigo-100">
+              <FileText className="w-5 h-5 md:w-6 md:h-6" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold tracking-tight text-zinc-900">Contract Editor</h2>
-              <p className="text-zinc-500 text-sm">Customize every detail of your service agreement.</p>
+              <h2 className="text-xl md:text-2xl font-bold tracking-tight text-zinc-900 leading-none">Contract Editor</h2>
+              <p className="hidden md:block text-zinc-500 text-sm mt-1">Customize every detail of your service agreement.</p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 md:gap-3">
             <button 
               onClick={onClose}
-              className="px-6 py-3 text-sm font-bold text-zinc-500 hover:text-zinc-900 transition-colors"
+              className="px-3 md:px-6 py-2 md:py-3 text-sm font-bold text-zinc-500 hover:text-zinc-900 transition-colors"
             >
               Cancel
             </button>
             <button 
               onClick={() => onSave(data)}
-              className="px-8 py-3 bg-indigo-600 text-white rounded-2xl text-sm font-bold shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition-all flex items-center gap-2"
+              className="px-4 md:px-8 py-2.5 md:py-3 bg-indigo-600 text-white rounded-xl md:rounded-2xl text-xs md:text-sm font-bold shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition-all flex items-center gap-2"
             >
-              <Save className="w-4 h-4" /> Generate PDF
+              <Save className="w-4 h-4 md:w-5 md:h-5" /> <span className="hidden sm:inline">Generate PDF</span><span className="sm:hidden">PDF</span>
             </button>
           </div>
         </div>
 
-        <div className="flex flex-1 overflow-hidden">
-          {/* Sidebar Tabs */}
-          <div className="w-72 border-r border-zinc-100 p-6 space-y-2 bg-zinc-50/30">
+        <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
+          {/* Sidebar Tabs - Horizontal Scroll on Mobile */}
+          <div className="w-full md:w-72 border-b md:border-b-0 md:border-r border-zinc-100 p-4 md:p-6 flex md:flex-col gap-2 bg-zinc-50/30 overflow-x-auto md:overflow-y-auto shrink-0">
             {tabs.map(tab => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as TabType)}
-                className={`w-full flex items-center gap-3 px-5 py-4 rounded-2xl text-sm font-bold transition-all ${
+                className={`flex items-center gap-3 px-4 md:px-5 py-3 md:py-4 rounded-xl md:rounded-2xl text-xs md:text-sm font-bold transition-all whitespace-nowrap min-w-max md:min-w-0 ${
                   activeTab === tab.id 
-                    ? 'bg-white text-indigo-600 shadow-sm border border-zinc-200 translate-x-1' 
+                    ? 'bg-white text-indigo-600 shadow-sm border border-zinc-200 md:translate-x-1' 
                     : 'text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900'
                 }`}
               >
-                <tab.icon className={`w-5 h-5 ${activeTab === tab.id ? 'text-indigo-600' : 'text-zinc-400'}`} />
+                <tab.icon className={`w-4 h-4 md:w-5 md:h-5 ${activeTab === tab.id ? 'text-indigo-600' : 'text-zinc-400'}`} />
                 {tab.label}
-                {activeTab === tab.id && <ChevronRight className="w-4 h-4 ml-auto" />}
+                <div className="hidden md:block ml-auto">
+                   {activeTab === tab.id && <ChevronRight className="w-4 h-4" />}
+                </div>
               </button>
             ))}
           </div>
 
           {/* Content Area */}
-          <div className="flex-1 overflow-y-auto p-10 bg-white">
+          <div className="flex-1 overflow-y-auto p-6 md:p-10 bg-white">
             <AnimatePresence mode="wait">
               {activeTab === 'general' && (
                 <motion.div 
                   key="general"
-                  initial={{ opacity: 0, x: 20 }}
+                  initial={{ opacity: 0, x: 10 }}
                   animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  className="space-y-8"
+                  exit={{ opacity: 0, x: -10 }}
+                  className="space-y-6 md:space-y-8"
                 >
-                  <div className="grid grid-cols-2 gap-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                     <div className="space-y-2">
                       <label className="text-xs font-bold text-zinc-400 uppercase tracking-wider px-1">Client Name</label>
                       <input 

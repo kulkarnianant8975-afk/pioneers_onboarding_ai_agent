@@ -67,8 +67,8 @@ export default function InvoiceEditor({ isOpen, onClose, initialData, onSave }: 
         className="bg-white w-full max-w-6xl h-full md:h-[90vh] rounded-none md:rounded-[32px] shadow-2xl flex flex-col md:flex-row overflow-hidden border border-zinc-200"
       >
         {/* Sidebar - Category Navigation */}
-        <div className="w-full md:w-80 bg-zinc-50/50 border-r border-zinc-100 flex flex-col p-6 overflow-y-auto">
-          <div className="mb-10 flex items-center gap-3">
+        <div className="w-full md:w-80 bg-zinc-50 border-b md:border-b-0 md:border-r border-zinc-100 flex md:flex-col p-4 md:p-6 overflow-x-auto md:overflow-y-auto shrink-0">
+          <div className="hidden md:flex mb-10 items-center gap-3">
              <div className="w-10 h-10 bg-[#2563eb] rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-200">
                <span className="font-syne font-black text-xl">P</span>
              </div>
@@ -78,31 +78,31 @@ export default function InvoiceEditor({ isOpen, onClose, initialData, onSave }: 
              </div>
           </div>
 
-          <nav className="space-y-2 flex-1">
+          <nav className="flex md:flex-col gap-2 flex-1 min-w-max md:min-w-0">
             <button 
               onClick={() => setActiveTab('client')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl transition-all ${activeTab === 'client' ? 'bg-white shadow-sm border border-zinc-200 text-blue-600' : 'text-zinc-500 hover:bg-zinc-100'}`}
+              className={`flex items-center gap-3 px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl transition-all whitespace-nowrap ${activeTab === 'client' ? 'bg-white shadow-sm border border-zinc-200 text-blue-600' : 'text-zinc-500 hover:bg-zinc-100'}`}
             >
-              <Building className="w-5 h-5" />
-              <span className="text-sm font-bold">Client Info</span>
+              <Building className="w-4 h-4 md:w-5 md:h-5" />
+              <span className="text-xs md:text-sm font-bold">Client Info</span>
             </button>
             <button 
               onClick={() => setActiveTab('billing')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl transition-all ${activeTab === 'billing' ? 'bg-white shadow-sm border border-zinc-200 text-blue-600' : 'text-zinc-500 hover:bg-zinc-100'}`}
+              className={`flex items-center gap-3 px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl transition-all whitespace-nowrap ${activeTab === 'billing' ? 'bg-white shadow-sm border border-zinc-200 text-blue-600' : 'text-zinc-500 hover:bg-zinc-100'}`}
             >
-              <CreditCard className="w-5 h-5" />
-              <span className="text-sm font-bold">Package & Rate</span>
+              <CreditCard className="w-4 h-4 md:w-5 md:h-5" />
+              <span className="text-xs md:text-sm font-bold">Package & Rate</span>
             </button>
             <button 
               onClick={() => setActiveTab('payment')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl transition-all ${activeTab === 'payment' ? 'bg-white shadow-sm border border-zinc-200 text-blue-600' : 'text-zinc-500 hover:bg-zinc-100'}`}
+              className={`flex items-center gap-3 px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl transition-all whitespace-nowrap ${activeTab === 'payment' ? 'bg-white shadow-sm border border-zinc-200 text-blue-600' : 'text-zinc-500 hover:bg-zinc-100'}`}
             >
-              <Wallet className="w-5 h-5" />
-              <span className="text-sm font-bold">Status & Payment</span>
+              <Wallet className="w-4 h-4 md:w-5 md:h-5" />
+              <span className="text-xs md:text-sm font-bold">Payment</span>
             </button>
           </nav>
 
-          <div className="pt-6 border-t border-zinc-100 space-y-4">
+          <div className="hidden md:block pt-6 border-t border-zinc-100 space-y-4">
             <button 
               onClick={() => onSave(data)}
               className="w-full bg-[#0f172a] text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-[#1e293b] active:scale-95 transition-all shadow-xl shadow-zinc-100"
@@ -110,6 +110,21 @@ export default function InvoiceEditor({ isOpen, onClose, initialData, onSave }: 
               <Save className="w-5 h-5" /> Generate PDF
             </button>
             <button onClick={onClose} className="w-full text-zinc-400 text-sm font-bold py-2 hover:text-rose-600">Cancel</button>
+          </div>
+
+          <div className="md:hidden flex items-center gap-2 min-w-max ml-4">
+             <button 
+               onClick={onClose}
+               className="p-3 bg-zinc-100 text-zinc-400 rounded-xl"
+             >
+               <X className="w-5 h-5" />
+             </button>
+             <button 
+               onClick={() => onSave(data)}
+               className="px-6 py-3 bg-[#2563eb] text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-lg shadow-blue-100"
+             >
+               Generate
+             </button>
           </div>
         </div>
 
@@ -137,25 +152,27 @@ export default function InvoiceEditor({ isOpen, onClose, initialData, onSave }: 
                           placeholder="PDMA-2024-..."
                         />
                       </div>
-                      <div className="space-y-2">
-                        <label className="text-[10px] font-bold text-zinc-400 uppercase ml-1">Invoice Date</label>
-                        <input 
-                          type="text"
-                          value={data.invoiceDate}
-                          onChange={e => updateField('invoiceDate', e.target.value)}
-                          className="w-full bg-white border border-zinc-200 p-4 rounded-2xl text-sm font-bold focus:ring-2 focus:ring-blue-500 outline-none transition-all"
-                          placeholder="Date of issue"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-[10px] font-bold text-zinc-400 uppercase ml-1">Due Date</label>
-                        <input 
-                          type="text"
-                          value={data.dueDate}
-                          onChange={e => updateField('dueDate', e.target.value)}
-                          className="w-full bg-white border border-zinc-200 p-4 rounded-2xl text-sm font-bold focus:ring-2 focus:ring-blue-500 outline-none transition-all"
-                          placeholder="Payment due by"
-                        />
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <label className="text-[10px] font-bold text-zinc-400 uppercase ml-1">Invoice Date</label>
+                          <input 
+                            type="text"
+                            value={data.invoiceDate}
+                            onChange={e => updateField('invoiceDate', e.target.value)}
+                            className="w-full bg-white border border-zinc-200 p-4 rounded-2xl text-sm font-bold focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                            placeholder="Date of issue"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-[10px] font-bold text-zinc-400 uppercase ml-1">Due Date</label>
+                          <input 
+                            type="text"
+                            value={data.dueDate}
+                            onChange={e => updateField('dueDate', e.target.value)}
+                            className="w-full bg-white border border-zinc-200 p-4 rounded-2xl text-sm font-bold focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                            placeholder="Payment due by"
+                          />
+                        </div>
                       </div>
                     </div>
                   </section>
@@ -216,7 +233,7 @@ export default function InvoiceEditor({ isOpen, onClose, initialData, onSave }: 
                           placeholder="Address, City, Pincode"
                         />
                       </div>
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <label className="text-[10px] font-bold text-zinc-400 uppercase ml-1">Client Email</label>
                           <input 

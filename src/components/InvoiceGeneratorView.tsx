@@ -65,17 +65,17 @@ export default function InvoiceGeneratorView() {
   return (
     <div className="space-y-8 max-w-6xl mx-auto pb-20">
       {/* Hero Section */}
-      <div className="bg-white rounded-[40px] p-10 md:p-14 border border-zinc-100 shadow-sm relative overflow-hidden group">
+      <div className="bg-white rounded-[32px] md:rounded-[40px] p-6 md:p-14 border border-zinc-100 shadow-sm relative overflow-hidden group">
         <div className="absolute top-0 right-0 w-96 h-96 bg-blue-50/50 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl group-hover:bg-blue-100/50 transition-colors" />
         
-        <div className="relative z-10 flex flex-col md:flex-row items-center gap-10">
-          <div className="w-24 h-24 bg-[#0f172a] rounded-[32px] flex items-center justify-center text-white shadow-2xl shadow-blue-100 shrink-0 border border-zinc-800 relative overflow-hidden group/icon">
+        <div className="relative z-10 flex flex-col md:flex-row items-center gap-6 md:gap-10">
+          <div className="w-16 h-16 md:w-24 md:h-24 bg-[#0f172a] rounded-[24px] md:rounded-[32px] flex items-center justify-center text-white shadow-2xl shadow-blue-100 shrink-0 border border-zinc-800 relative overflow-hidden group/icon">
             <div className="absolute inset-0 bg-blue-600/20 translate-y-full group-hover/icon:translate-y-0 transition-transform duration-500" />
-            <span className="font-syne font-black text-4xl relative z-10 transition-transform group-hover/icon:scale-110">P</span>
+            <span className="font-syne font-black text-2xl md:text-4xl relative z-10 transition-transform group-hover/icon:scale-110">P</span>
           </div>
           <div className="flex-1 text-center md:text-left">
-            <h2 className="text-4xl font-black text-[#0f172a] tracking-tight mb-4 font-syne uppercase">Invoice Service</h2>
-            <p className="text-zinc-500 text-lg max-w-xl font-medium">Generate high-fidelity, branded payment requests for your clients.</p>
+            <h2 className="text-2xl md:text-4xl font-black text-[#0f172a] tracking-tight mb-2 md:mb-4 font-syne uppercase">Invoice Service</h2>
+            <p className="text-zinc-500 text-sm md:text-lg max-w-xl font-medium">Generate high-fidelity, branded payment requests for your clients.</p>
           </div>
         </div>
 

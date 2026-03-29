@@ -261,8 +261,40 @@ export default function App() {
   const currentView = user ? activeView : (activeView === 'invoices' ? 'invoices' : 'contracts');
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] font-sans text-zinc-900">
-      {/* Sidebar - Public or Private */}
+    <div className="min-h-screen bg-[#F8F9FA] font-sans text-zinc-900 pb-20 md:pb-0">
+      {/* Mobile Bottom Navigation - Visible only on small screens */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-zinc-200 px-6 py-3 flex items-center justify-around z-[90] md:hidden shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+        <button 
+          onClick={() => setActiveView('dashboard')}
+          className={`flex flex-col items-center gap-1 transition-colors ${currentView === 'dashboard' ? 'text-indigo-600' : 'text-zinc-400'}`}
+        >
+          <LayoutDashboard className="w-6 h-6" />
+          <span className="text-[10px] font-bold">Dash</span>
+        </button>
+        <button 
+          onClick={() => setActiveView(user ? 'clients' : 'contracts')}
+          className={`flex flex-col items-center gap-1 transition-colors ${currentView === (user ? 'clients' : 'contracts') ? 'text-indigo-600' : 'text-zinc-400'}`}
+        >
+          {user ? <Users className="w-6 h-6" /> : <FileText className="w-6 h-6" />}
+          <span className="text-[10px] font-bold">{user ? 'Clients' : 'Contract'}</span>
+        </button>
+        <button 
+          onClick={() => setActiveView('invoices')}
+          className={`flex flex-col items-center gap-1 transition-colors ${currentView === 'invoices' ? 'text-orange-600' : 'text-zinc-400'}`}
+        >
+          <CreditCard className="w-6 h-6" />
+          <span className="text-[10px] font-bold">Invoice</span>
+        </button>
+        <button 
+          onClick={() => setActiveView('settings')}
+          className={`flex flex-col items-center gap-1 transition-colors ${currentView === 'settings' ? 'text-indigo-600' : 'text-zinc-400'}`}
+        >
+          <SettingsIcon className="w-6 h-6" />
+          <span className="text-[10px] font-bold">More</span>
+        </button>
+      </nav>
+
+      {/* Sidebar - Desktop Only */}
       <aside className="fixed left-0 top-0 bottom-0 w-64 bg-white border-r border-zinc-200 p-6 hidden md:flex flex-col">
         <div className="flex items-center gap-3 mb-10 px-2">
           <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
@@ -355,11 +387,11 @@ export default function App() {
       </aside>
 
       {/* Main Content */}
-      <main className="md:ml-64 p-4 md:p-8 lg:p-12">
-        <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
+      <main className="md:ml-64 p-6 md:p-12">
+        <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight capitalize">{currentView}</h1>
-            <p className="text-zinc-500">
+            <h1 className="text-2xl md:text-3xl font-bold tracking-tight capitalize">{currentView}</h1>
+            <p className="text-zinc-500 text-sm md:text-base">
               {currentView === 'dashboard' && 'Overview of your onboarding performance.'}
               {currentView === 'clients' && 'Manage and onboard your new clients.'}
               {currentView === 'contracts' && 'Generate professional service agreements instantly.'}

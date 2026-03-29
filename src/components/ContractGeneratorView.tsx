@@ -144,27 +144,27 @@ export default function ContractGeneratorView() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
-      <div className="bg-white rounded-[32px] p-10 border border-zinc-200 shadow-sm">
-        <div className="flex items-center gap-6 mb-8">
-          <div className="w-16 h-16 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600 shadow-sm border border-indigo-100">
-            <FileText className="w-8 h-8" />
+      <div className="bg-white rounded-[32px] p-6 md:p-10 border border-zinc-200 shadow-sm">
+        <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-6 mb-8 text-center md:text-left">
+          <div className="w-14 h-14 md:w-16 md:h-16 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600 shadow-sm border border-indigo-100 shrink-0">
+            <FileText className="w-7 h-7 md:w-8 md:h-8" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">Contract Generator</h2>
-            <p className="text-zinc-500">Generate professional service agreements for any client instantly.</p>
+            <h2 className="text-xl md:text-2xl font-bold tracking-tight">Contract Generator</h2>
+            <p className="text-zinc-500 text-sm">Generate professional service agreements for any client instantly.</p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <button
             onClick={() => setIsEditorOpen(true)}
-            className="flex flex-col items-center justify-center p-8 rounded-[24px] border-2 border-dashed border-zinc-200 hover:border-indigo-300 hover:bg-indigo-50/30 transition-all group col-span-full py-16"
+            className="flex flex-col items-center justify-center p-6 md:p-8 rounded-[24px] border-2 border-dashed border-zinc-200 hover:border-indigo-300 hover:bg-indigo-50/30 transition-all group col-span-full py-12 md:py-16"
           >
-            <div className="w-16 h-16 bg-zinc-100 rounded-2xl flex items-center justify-center text-zinc-400 group-hover:bg-indigo-100 group-hover:text-indigo-600 transition-all mb-4">
-              <Plus className="w-8 h-8" />
+            <div className="w-12 h-12 md:w-16 md:h-16 bg-zinc-100 rounded-2xl flex items-center justify-center text-zinc-400 group-hover:bg-indigo-100 group-hover:text-indigo-600 transition-all mb-4">
+              <Plus className="w-6 h-6 md:w-8 md:h-8" />
             </div>
-            <span className="text-xl font-bold text-zinc-900">Create New Service Agreement</span>
-            <span className="text-sm text-zinc-500 mt-2">Customize client details, services, and payment terms</span>
+            <span className="text-lg md:text-xl font-bold text-zinc-900 text-center px-4">Create New Service Agreement</span>
+            <span className="text-xs md:text-sm text-zinc-500 mt-2 text-center px-6">Customize client details, services, and payment terms</span>
           </button>
 
           {lastGeneratedUrl && (
