@@ -175,43 +175,56 @@ export class ContractGenerator {
   }
 
   private addPageHeader(data: ContractData) {
-    const W = this.pageWidth;
-    const lm = this.margin;
-    const rm = this.margin;
-    
-    // --- PREMIUM BRAND HEADER (SLEEK BAR) ---
+    // Left Blue Block (Main Header)
     this.doc.setFillColor(...this.darkBlue);
-    this.doc.rect(0, 0, W, 45, 'F');
+    this.doc.rect(this.margin, 10, this.pageWidth * 0.55 - this.margin, 35, 'F');
     
-    // Logo Icon (Matching Invoice / Preview UI) - EXTRA LARGE & BOLD
-    const logoY = 8;
-    this.doc.setFillColor(37, 99, 235); // Brand Blue
-    this.doc.roundedRect(lm, logoY, 32, 32, 6, 6, 'F');
-    this.doc.setTextColor(255, 255, 255);
-    this.doc.setFont('helvetica', 'bold');
-    this.doc.setFontSize(36); // Extra Large 36pt
-    this.doc.text('P', lm + 11, logoY + 22);
-
-    this.doc.setFont('helvetica', 'bold');
-    this.doc.setFontSize(24);
-    this.doc.setTextColor(255, 255, 255);
-    this.doc.text('PIONEERS', lm + 40, logoY + 15);
-    this.doc.setFontSize(8);
-    this.doc.setTextColor(148, 163, 184); // Slate-400
-    this.doc.text('DIGITAL MARKETING AGENCY', lm + 40, logoY + 22);
-
-    // Right Content Info (Service Agreement Title)
-    this.doc.setFontSize(26);
-    this.doc.setTextColor(255, 255, 255);
-    this.doc.text('SERVICE AGREEMENT', W - rm, logoY + 16, { align: 'right' });
+    // Right Blue Block (Metadata Header)
+    // We'll keep them distinct but visually adjacent (if same color) or slightly differentiated
+    // The screenshot shows the right side also has a dark blue background
+    this.doc.setFillColor(44, 58, 88); // Slightly lighter navy for contrast or same as darkBlue
+    this.doc.rect(this.pageWidth * 0.55, 10, this.pageWidth * 0.45 - this.margin, 35, 'F');
     
-    this.doc.setTextColor(200, 200, 200); 
-    this.doc.setFontSize(9);
-    this.doc.setFont('helvetica', 'normal');
-    this.doc.text(`AGR No: ${data.agreementNumber}`, W - rm, logoY + 22, { align: 'right' });
-    this.doc.text(`Date: ${data.agreementDate}`, W - rm, logoY + 26, { align: 'right' });
+    // Orange Bottom Border (Only under Left Block)
+    this.doc.setFillColor(...this.orangeColor);
+    this.doc.rect(this.margin, 45, this.pageWidth * 0.55 - this.margin, 12, 'F');
+
+    // Right Content Info
+    const rightX = this.pageWidth - this.margin - 2;
     this.doc.setTextColor(...this.orangeColor);
-    this.doc.text(`Valid for: ${data.validityDays} Days`, W - rm, logoY + 31, { align: 'right' });
+    this.doc.setFontSize(18); // Adjusted size to fit "SERVICE AGREEMENT" nicely
+    this.doc.setFont('helvetica', 'bold');
+    this.doc.text('SERVICE AGREEMENT', rightX, 23, { align: 'right' });
+    
+    this.doc.setTextColor(200, 200, 200); // Light gray for metadata info
+    this.doc.setFontSize(9.5);
+    this.doc.setFont('helvetica', 'normal');
+    this.doc.text(`AGR No: ${data.agreementNumber || 'PDA-2026-001'}`, rightX, 30, { align: 'right' });
+    this.doc.text(`Date: ${data.agreementDate || 'Current Date'}`, rightX, 35, { align: 'right' });
+    
+    this.doc.setTextColor(...this.orangeColor);
+    this.doc.text(`Valid for: ${data.validityDays || '15'} Days`, rightX, 40, { align: 'right' });
+
+    // Agency Info (Left Side Content)
+    this.doc.setTextColor(255, 255, 255);
+    this.doc.setFontSize(22);
+    this.doc.setFont('helvetica', 'bold');
+    
+    const availableAgencyWidth = (this.pageWidth * 0.55 - this.margin) - 15;
+    const agencyName = (data.agencyName || 'PIONEERS').toString().toUpperCase();
+    this.doc.text(agencyName, this.margin + 8, 22);
+    
+    // Agency Type in Orange
+    this.doc.setTextColor(...this.orangeColor);
+    this.doc.setFontSize(11);
+    this.doc.setFont('helvetica', 'normal');
+    this.doc.text((data.agencyType || 'Digital Marketing Agency').toString(), this.margin + 8, 28);
+    
+    // Contact Info in White/Gray
+    this.doc.setTextColor(220, 220, 220);
+    this.doc.setFontSize(8.5);
+    this.doc.text(data.agencyAddress || '', this.margin + 8, 35);
+    this.doc.text(`${data.agencyEmail || ''} | CEO: ${data.agencyCEO || ''}`, this.margin + 8, 39);
   }
 
   private addPage1(data: ContractData) {
