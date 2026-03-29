@@ -155,6 +155,7 @@ export interface InvoiceData {
   agencyCEO: string;
   // Billing Parameters
   serviceCategory: 'package' | 'addon';
+  durationType: 'monthly' | 'one-time';
   pkgName: string;
   monthlyRate: number;
   duration: number;

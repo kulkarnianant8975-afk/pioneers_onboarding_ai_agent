@@ -111,23 +111,31 @@ export class InvoiceGenerator {
     doc.text(`Date: ${data.invoiceDate}`, W - rm, y + 4.5, { align: 'right' });
     doc.text(`Due: ${data.dueDate}`, W - rm, y + 9, { align: 'right' });
     
-    const end = Math.min(data.startMonth + data.monthsPayingNow - 1, data.duration);
-    const periodText = data.monthsPayingNow === 1 
-      ? `Month ${data.startMonth} of ${data.duration}` 
-      : `Month ${data.startMonth}–${end} of ${data.duration}`;
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(37, 99, 235);
-    doc.text(`Period: ${periodText}`, W - rm, y + 14, { align: 'right' });
+    let periodText = '';
+    if (data.durationType === 'monthly') {
+      const end = Math.min(data.startMonth + data.monthsPayingNow - 1, data.duration);
+      periodText = data.monthsPayingNow === 1 
+        ? `Month ${data.startMonth} of ${data.duration}` 
+        : `Month ${data.startMonth}–${end} of ${data.duration}`;
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(37, 99, 235);
+      doc.text(`Period: ${periodText}`, W - rm, y + 14, { align: 'right' });
+    }
 
     y = Math.max(agY, clY, y + 20) + 15;
 
     // --- ITEMS TABLE (Premium Grid Style) ---
-    const description = (data.serviceCategory === 'package' ? `${data.pkgName} Package` : 'Add-on Service') + ': Digital Marketing Services';
-    const durationText = data.monthsPayingNow + ' Month' + (data.monthsPayingNow > 1 ? 's' : '');
+    const description = data.serviceCategory === 'package' 
+      ? `${data.pkgName} Package: Digital Marketing Services`
+      : `${data.pkgName}: Pioneers Excellence Service`;
+      
+    const durationText = data.durationType === 'one-time' 
+      ? 'One-Time' 
+      : data.monthsPayingNow + ' Month' + (data.monthsPayingNow > 1 ? 's' : '');
     
     const tableBody = [
       [
-        { content: `${description}\n(${periodText})`, styles: { fontStyle: 'bold' as const, fontSize: 10 } },
+        { content: periodText ? `${description}\n(${periodText})` : description, styles: { fontStyle: 'bold' as const, fontSize: 10 } },
         this.formatCurrency(data.monthlyRate),
         durationText,
         { content: this.formatCurrency(data.subtotal), styles: { halign: 'right' as const, fontStyle: 'bold' as const, fontSize: 11 } }

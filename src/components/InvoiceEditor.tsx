@@ -257,13 +257,33 @@ export default function InvoiceEditor({ isOpen, onClose, initialData, onSave }: 
                        >
                          Package
                        </button>
-                       <button 
-                         onClick={() => updateField('serviceCategory', 'addon')}
-                         className={`flex-1 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest border transition-all ${data.serviceCategory === 'addon' ? 'bg-[#2563eb] text-white border-[#2563eb] shadow-lg shadow-blue-100' : 'bg-white text-zinc-400 border-zinc-100 hover:border-zinc-200'}`}
-                       >
-                         Add-on Service
-                       </button>
-                    </div>
+                        <button 
+                          onClick={() => updateField('serviceCategory', 'addon')}
+                          className={`flex-1 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest border transition-all ${data.serviceCategory === 'addon' ? 'bg-[#2563eb] text-white border-[#2563eb] shadow-lg shadow-blue-100' : 'bg-white text-zinc-400 border-zinc-100 hover:border-zinc-200'}`}
+                        >
+                          Add-on Service
+                        </button>
+                     </div>
+
+                     <h4 className="text-[11px] font-black text-zinc-300 uppercase tracking-[0.2em] pt-4">Duration Type</h4>
+                     <div className="flex gap-2">
+                        <button 
+                          onClick={() => updateField('durationType', 'monthly')}
+                          className={`flex-1 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest border transition-all ${data.durationType === 'monthly' ? 'bg-[#2563eb] text-white border-[#2563eb] shadow-lg shadow-blue-100' : 'bg-white text-zinc-400 border-zinc-100 hover:border-zinc-200'}`}
+                        >
+                          Monthly
+                        </button>
+                        <button 
+                          onClick={() => {
+                            updateField('durationType', 'one-time');
+                            updateField('monthsPayingNow', 1);
+                            updateField('startMonth', 1);
+                          }}
+                          className={`flex-1 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest border transition-all ${data.durationType === 'one-time' ? 'bg-[#2563eb] text-white border-[#2563eb] shadow-lg shadow-blue-100' : 'bg-white text-zinc-400 border-zinc-100 hover:border-zinc-200'}`}
+                        >
+                          One-Time
+                        </button>
+                     </div>
 
                     <h4 className="text-[11px] font-black text-zinc-300 uppercase tracking-[0.2em] pt-4">
                       {data.serviceCategory === 'package' ? 'Select Package' : 'Service Name'}
@@ -318,7 +338,7 @@ export default function InvoiceEditor({ isOpen, onClose, initialData, onSave }: 
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className={`grid grid-cols-2 gap-4 transition-all ${data.durationType === 'one-time' ? 'opacity-40 pointer-events-none' : ''}`}>
                         <div className="space-y-2">
                           <label className="text-[10px] font-bold text-zinc-400 uppercase ml-1">Months Paying Now</label>
                           <select 
@@ -520,7 +540,7 @@ export default function InvoiceEditor({ isOpen, onClose, initialData, onSave }: 
                           <div className="text-[8px] text-zinc-400 mt-1 italic leading-relaxed">Pioneers Standard Excellence</div>
                         </td>
                         <td className="text-center text-[10px] text-zinc-500">
-                          {data.monthsPayingNow} {data.monthsPayingNow > 1 ? 'Months' : 'Month'}
+                          {data.durationType === 'one-time' ? 'One-Time' : `${data.monthsPayingNow} ${data.monthsPayingNow > 1 ? 'Months' : 'Month'}`}
                         </td>
                         <td className="text-right font-bold text-[10px] text-[#0f172a] px-2">₹{data.monthlyRate.toLocaleString()}</td>
                       </tr>
