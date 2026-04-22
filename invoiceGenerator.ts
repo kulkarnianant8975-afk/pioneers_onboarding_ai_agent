@@ -71,45 +71,25 @@ export class InvoiceGenerator {
     doc.text('PAYMENT DETAILS', W - rm, y, { align: 'right' });
 
     y += 6;
+    
+    // Keep track of column Y positions separately
+    let agY = y;
+    let clY = y;
+    let rightY = y;
+    
+    // Payment Details (Right Column)
     doc.setFontSize(10);
-    doc.setTextColor(30, 41, 59);
-    
-    // Agency info
-    doc.text(data.agencyName.toUpperCase(), lm, y);
-    
-    // Client info
-    doc.text(data.clientName || 'CLIENT BUSINESS', lm + (cw / 2), y);
-    
-    // Invoice #
     doc.setTextColor(37, 99, 235); // Brand Blue
-    doc.text(`${data.invoiceNumber}`, W - rm, y, { align: 'right' });
+    doc.text(`${data.invoiceNumber}`, W - rm, rightY, { align: 'right' });
+    rightY += 5;
     
-    y += 5;
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(9);
     doc.setTextColor(100, 116, 139);
-    
-    // Agency Address
-    const agLines = data.agencyAddress.split('\n');
-    let agY = y;
-    agLines.forEach(line => {
-      doc.text(line.trim(), lm, agY);
-      agY += 4.5;
-    });
-    doc.text(data.agencyEmail, lm, agY);
-
-    // Client Address
-    const clLines = (data.clientAddress || '').split('\n').slice(0, 3);
-    let clY = y;
-    clLines.forEach(line => {
-      doc.text(line.trim(), lm + (cw / 2), clY);
-      clY += 4.5;
-    });
-    if (data.clientEmail) doc.text(data.clientEmail, lm + (cw / 2), clY);
-
-    // Dates
-    doc.text(`Date: ${data.invoiceDate}`, W - rm, y + 4.5, { align: 'right' });
-    doc.text(`Due: ${data.dueDate}`, W - rm, y + 9, { align: 'right' });
+    doc.text(`Date: ${data.invoiceDate}`, W - rm, rightY, { align: 'right' });
+    rightY += 4.5;
+    doc.text(`Due: ${data.dueDate}`, W - rm, rightY, { align: 'right' });
+    rightY += 4.5;
     
     let periodText = '';
     if (data.durationType === 'monthly') {
@@ -119,10 +99,53 @@ export class InvoiceGenerator {
         : `Month ${data.startMonth}–${end} of ${data.duration}`;
       doc.setFont('helvetica', 'bold');
       doc.setTextColor(37, 99, 235);
-      doc.text(`Period: ${periodText}`, W - rm, y + 14, { align: 'right' });
+      doc.text(`Period: ${periodText}`, W - rm, rightY, { align: 'right' });
     }
 
-    y = Math.max(agY, clY, y + 20) + 15;
+    // Agency & Client info
+    doc.setFontSize(10);
+    doc.setTextColor(30, 41, 59);
+    doc.setFont('helvetica', 'bold');
+    
+    const agencyNameSplit = doc.splitTextToSize(data.agencyName.toUpperCase(), (cw / 2) - 10);
+    agencyNameSplit.forEach((line: string) => {
+      doc.text(line, lm, agY);
+      agY += 5;
+    });
+    
+    const clientNameText = data.clientName || 'CLIENT BUSINESS';
+    const clientNameSplit = doc.splitTextToSize(clientNameText, 50); // 50mm width to prevent overlap
+    clientNameSplit.forEach((line: string) => {
+      doc.text(line, lm + (cw / 2), clY);
+      clY += 5;
+    });
+    
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(100, 116, 139);
+    
+    // Agency Address
+    const agencyAddressSplit = doc.splitTextToSize(data.agencyAddress || '', (cw / 2) - 10);
+    agencyAddressSplit.forEach((line: string) => {
+      doc.text(line, lm, agY);
+      agY += 4.5;
+    });
+    doc.text(data.agencyEmail || '', lm, agY);
+    agY += 4.5;
+
+    // Client Address
+    const clientAddressSplit = doc.splitTextToSize(data.clientAddress || '', 50); // 50mm width to prevent overlap
+    clientAddressSplit.forEach((line: string) => {
+      doc.text(line, lm + (cw / 2), clY);
+      clY += 4.5;
+    });
+    if (data.clientEmail) {
+      doc.text(data.clientEmail, lm + (cw / 2), clY);
+      clY += 4.5;
+    }
+
+    // Determine the next Y position for the table
+    y = Math.max(agY, clY, rightY) + 15;
 
     // --- ITEMS TABLE (Premium Grid Style) ---
     const description = data.serviceCategory === 'package' 

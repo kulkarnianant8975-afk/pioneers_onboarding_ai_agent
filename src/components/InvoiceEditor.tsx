@@ -518,11 +518,11 @@ export default function InvoiceEditor({ isOpen, onClose, initialData, onSave }: 
           </div>
 
           {/* Real-time Preview Section */}
-          <div className="hidden lg:flex flex-1 bg-zinc-100/50 p-12 overflow-y-auto justify-center">
-            <div className="w-full max-w-[500px] bg-white shadow-2xl rounded-sm aspect-[1/1.414] flex flex-col border border-zinc-200 origin-top scale-[0.95] overflow-hidden">
+          <div className="hidden lg:flex flex-1 bg-zinc-100/50 p-6 xl:p-12 overflow-y-auto justify-center items-start">
+            <div className="w-full max-w-[500px] bg-white shadow-2xl rounded-sm aspect-[1/1.414] flex flex-col border border-zinc-200 origin-top shrink-0 overflow-hidden relative">
               {/* Paper Preview Content */}
                         {/* Premium Header */}
-              <div className="bg-[#0f172a] p-6 text-white flex justify-between items-center">
+              <div className="bg-[#0f172a] p-6 text-white flex justify-between items-center shrink-0">
                 <div className="flex items-center gap-4">
                    <div className="w-10 h-10 bg-[#2563eb] rounded-lg flex items-center justify-center text-white shadow-lg shrink-0">
                       <span className="font-syne font-black text-xl">P</span>
@@ -537,23 +537,23 @@ export default function InvoiceEditor({ isOpen, onClose, initialData, onSave }: 
                 </div>
               </div>
 
-              <div className="p-10 flex flex-col gap-10 flex-1 relative">
+              <div className="p-8 xl:p-10 flex flex-col gap-8 xl:gap-10 flex-1 relative overflow-y-auto">
                 {/* Watermark */}
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03] select-none">
                   <span className="text-[150px] font-black rotate-45">P</span>
                 </div>
 
                 {/* Meta Info Grid */}
-                <div className="grid grid-cols-3 gap-6 relative z-10">
+                <div className="grid grid-cols-3 gap-4 xl:gap-6 relative z-10 shrink-0">
                   <div className="space-y-2">
                     <div className="text-[7px] font-black text-zinc-300 uppercase tracking-widest">Issued From</div>
-                    <div className="font-bold text-[10px] text-[#0f172a] mb-1">{data.agencyName}</div>
-                    <div className="text-[8px] text-zinc-400 leading-relaxed whitespace-pre-wrap">{data.agencyAddress}</div>
+                    <div className="font-bold text-[10px] text-[#0f172a] mb-1 break-words">{data.agencyName}</div>
+                    <div className="text-[8px] text-zinc-400 leading-relaxed whitespace-pre-wrap break-words">{data.agencyAddress}</div>
                   </div>
                   <div className="space-y-2">
                     <div className="text-[7px] font-black text-zinc-300 uppercase tracking-widest">Bill To</div>
-                    <div className="font-bold text-[10px] text-[#0f172a] mb-1">{data.clientName || 'Client Business Name'}</div>
-                    <div className="text-[8px] text-zinc-400 leading-relaxed whitespace-pre-wrap">{data.clientAddress || 'Address will appear here'}</div>
+                    <div className="font-bold text-[10px] text-[#0f172a] mb-1 break-words">{data.clientName || 'Client Business Name'}</div>
+                    <div className="text-[8px] text-zinc-400 leading-relaxed whitespace-pre-wrap break-words">{data.clientAddress || 'Address will appear here'}</div>
                   </div>
                   <div className="text-right space-y-2">
                     <div className="text-[7px] font-black text-zinc-300 uppercase tracking-widest">Invoice Details</div>
