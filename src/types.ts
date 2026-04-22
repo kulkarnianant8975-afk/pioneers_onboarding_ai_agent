@@ -161,7 +161,9 @@ export interface InvoiceData {
   duration: number;
   monthsPayingNow: number;
   startMonth: number;
-  discount: number; // percentage
+  discount: number; // flat amount
+  amountPaid: number;
+  amountRemaining: number;
   overrideTotal?: number;
   // Line Items (Optional add-ons)
   items: InvoiceItem[];

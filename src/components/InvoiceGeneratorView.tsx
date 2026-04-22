@@ -8,7 +8,7 @@ import { InvoiceGenerator } from '../../invoiceGenerator';
 export default function InvoiceGeneratorView() {
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
-  
+
   const defaultInvoiceData: InvoiceData = {
     invoiceNumber: `PDMA-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`,
     invoiceDate: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }),
@@ -33,6 +33,8 @@ export default function InvoiceGeneratorView() {
     monthsPayingNow: 1,
     startMonth: 1,
     discount: 0,
+    amountPaid: 0,
+    amountRemaining: 15000,
     paymentMethod: 'upi',
     paymentDetails: {
       upiApp: 'GPay / PhonePe',
@@ -65,71 +67,74 @@ export default function InvoiceGeneratorView() {
   return (
     <div className="space-y-8 max-w-6xl mx-auto pb-20">
       {/* Hero Section */}
-      <div className="bg-white rounded-[32px] md:rounded-[40px] p-6 md:p-14 border border-zinc-100 shadow-sm relative overflow-hidden group">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-50/50 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl group-hover:bg-blue-100/50 transition-colors" />
-        
-        <div className="relative z-10 flex flex-col md:flex-row items-center gap-6 md:gap-10">
-          <div className="w-16 h-16 md:w-24 md:h-24 bg-[#0f172a] rounded-[24px] md:rounded-[32px] flex items-center justify-center text-white shadow-2xl shadow-blue-100 shrink-0 border border-zinc-800 relative overflow-hidden group/icon">
-            <div className="absolute inset-0 bg-blue-600/20 translate-y-full group-hover/icon:translate-y-0 transition-transform duration-500" />
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+        className="bg-white/80 backdrop-blur-3xl rounded-[40px] p-6 md:p-14 border border-zinc-200/50 shadow-premium relative overflow-hidden group"
+      >
+        <div className="absolute top-0 right-0 w-96 h-96 bg-orange-50/50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none z-0" />
+
+        <div className="relative z-10 flex flex-col md:flex-row items-center gap-6 md:gap-10 mb-10 text-center md:text-left">
+          <div className="w-16 h-16 md:w-24 md:h-24 bg-gradient-to-br from-orange-50 to-orange-100 rounded-[24px] md:rounded-[32px] flex items-center justify-center text-orange-600 shadow-sm border border-orange-200/50 shrink-0 relative overflow-hidden group/icon">
             <span className="font-syne font-black text-2xl md:text-4xl relative z-10 transition-transform group-hover/icon:scale-110">P</span>
           </div>
           <div className="flex-1 text-center md:text-left">
-            <h2 className="text-2xl md:text-4xl font-black text-[#0f172a] tracking-tight mb-2 md:mb-4 font-syne uppercase">Invoice Service</h2>
-            <p className="text-zinc-500 text-sm md:text-lg max-w-xl font-medium">Generate high-fidelity, branded payment requests for your clients.</p>
+            <h2 className="text-3xl md:text-4xl font-syne font-bold text-zinc-900 tracking-tight mb-2 uppercase">Invoice Service</h2>
+            <p className="text-zinc-500 text-sm md:text-base font-medium">Generate high-fidelity, branded payment requests for your clients.</p>
           </div>
         </div>
 
-        <div className="mt-14 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <button 
-              onClick={() => setIsEditorOpen(true)}
-              className="bg-[#0f172a] hover:bg-[#1e293b] text-white p-10 rounded-[40px] flex flex-col items-center gap-6 transition-all border border-zinc-800 active:scale-[0.98] group shadow-2xl shadow-zinc-200"
-            >
-              <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Plus className="w-8 h-8 text-[#22d3ee]" />
-              </div>
-              <div className="text-center">
-                <span className="text-xl font-bold block mb-1 font-syne">Create Payment Invoice</span>
-                <span className="text-zinc-500 text-sm font-medium">Automatic billing, multi-month duration, and live preview</span>
-              </div>
-            </button>
-
-            <div className="bg-zinc-50 p-10 rounded-[40px] flex flex-col gap-8 border border-zinc-100 relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-48 h-48 bg-blue-500/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl" />
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-white rounded-xl shadow-sm border border-zinc-100 flex items-center justify-center">
-                  <Sparkles className="w-6 h-6 text-[#2563eb]" />
-                </div>
-                <h3 className="text-lg font-bold font-syne tracking-tight text-[#0f172a]">Original Design</h3>
-              </div>
-              <ul className="space-y-4">
-                <li className="flex items-center gap-3 text-zinc-500 text-sm font-medium">
-                  <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center shrink-0">
-                    <CheckCircle2 className="w-3 h-3 text-[#2563eb]" />
-                  </div>
-                  Custom 'Letterhead' PDF generation
-                </li>
-                <li className="flex items-center gap-3 text-zinc-500 text-sm font-medium">
-                  <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center shrink-0">
-                    <CheckCircle2 className="w-3 h-3 text-[#2563eb]" />
-                  </div>
-                  Live Preview Editor (What you see is what you get)
-                </li>
-                <li className="flex items-center gap-3 text-zinc-500 text-sm font-medium">
-                  <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center shrink-0">
-                    <CheckCircle2 className="w-3 h-3 text-[#2563eb]" />
-                  </div>
-                  Unified Pioneers Digital Brand Palette
-                </li>
-              </ul>
+        <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <button
+            onClick={() => setIsEditorOpen(true)}
+            className="flex flex-col items-center justify-center p-10 py-16 rounded-[32px] border-2 border-dashed border-zinc-200 hover:border-orange-400 hover:bg-orange-50/50 hover:shadow-premium-hover hover:-translate-y-1 transition-all duration-300 group bg-white/50"
+          >
+            <div className="w-16 h-16 bg-zinc-100 rounded-2xl flex items-center justify-center shadow-sm group-hover:bg-orange-600 group-hover:shadow-glow-orange group-hover:scale-110 transition-all duration-300 mb-5">
+              <Plus className="w-8 h-8 text-zinc-400 group-hover:text-white transition-colors" />
             </div>
+            <span className="text-xl md:text-2xl font-syne font-bold text-zinc-900 text-center mb-2 tracking-tight">Create Payment Invoice</span>
+            <span className="text-sm md:text-base text-zinc-500 font-medium text-center px-4">Automatic billing, multi-month duration, and live preview</span>
+          </button>
+
+          <div className="bg-orange-950 p-10 py-12 rounded-[40px] flex flex-col gap-8 border border-orange-900/50 relative overflow-hidden shadow-premium">
+            <div className="absolute inset-0 bg-gradient-to-br from-orange-900/50 to-transparent pointer-events-none" />
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl" />
+            
+            <div className="relative z-10 flex items-center gap-4">
+              <div className="w-12 h-12 bg-orange-900/80 rounded-xl shadow-inner border border-orange-800/50 flex items-center justify-center">
+                <Sparkles className="w-6 h-6 text-orange-400" />
+              </div>
+              <h3 className="text-2xl font-bold font-syne tracking-tight text-white">Original Design</h3>
+            </div>
+            
+            <ul className="relative z-10 space-y-5">
+              <li className="flex items-center gap-4 text-orange-200 text-sm md:text-base font-medium">
+                <div className="w-6 h-6 bg-orange-900/50 rounded-full flex items-center justify-center shrink-0 border border-orange-800/50">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-orange-400" />
+                </div>
+                Custom 'Letterhead' PDF generation
+              </li>
+              <li className="flex items-center gap-4 text-orange-200 text-sm md:text-base font-medium">
+                <div className="w-6 h-6 bg-orange-900/50 rounded-full flex items-center justify-center shrink-0 border border-orange-800/50">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-orange-400" />
+                </div>
+                Live Preview Editor (WYSIWYG)
+              </li>
+              <li className="flex items-center gap-4 text-orange-200 text-sm md:text-base font-medium">
+                <div className="w-6 h-6 bg-orange-900/50 rounded-full flex items-center justify-center shrink-0 border border-orange-800/50">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-orange-400" />
+                </div>
+                Unified Pioneers Digital Brand Palette
+              </li>
+            </ul>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       <AnimatePresence>
         {isEditorOpen && (
-          <InvoiceEditor 
+          <InvoiceEditor
             isOpen={isEditorOpen}
             onClose={() => setIsEditorOpen(false)}
             initialData={defaultInvoiceData}
@@ -141,7 +146,7 @@ export default function InvoiceGeneratorView() {
       {/* Loading Overlay */}
       <AnimatePresence>
         {isGenerating && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

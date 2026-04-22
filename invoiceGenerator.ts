@@ -184,20 +184,26 @@ export class InvoiceGenerator {
     
     y += 7;
     doc.setTextColor(100, 116, 139);
-    doc.text(`Discount (${data.discount}%):`, tx + 5, y);
+    doc.text(`Discount:`, tx + 5, y);
     doc.setTextColor(220, 38, 38);
-    doc.text(`-( ${this.formatCurrency((data.subtotal * data.discount) / 100)} )`, W - rm - 5, y, { align: 'right' });
+    doc.text(`-( ${this.formatCurrency(data.discount)} )`, W - rm - 5, y, { align: 'right' });
     
+    y += 7;
+    doc.setTextColor(100, 116, 139);
+    doc.text(`Amount Paid:`, tx + 5, y);
+    doc.setTextColor(5, 150, 105);
+    doc.text(`-( ${this.formatCurrency(data.amountPaid)} )`, W - rm - 5, y, { align: 'right' });
+
     y += 10;
     // Total Amount Box
     doc.setFillColor(37, 99, 235); // Blue
     doc.roundedRect(tx, y - 5, totalBoxW, 14, 2, 2, 'F');
     doc.setTextColor(255, 255, 255);
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(12);
-    doc.text('Total Due:', tx + 5, y + 4);
-    doc.setFontSize(14);
-    doc.text(this.formatCurrency(data.total), W - rm - 5, y + 4, { align: 'right' });
+    doc.setFontSize(11);
+    doc.text('Remaining Due:', tx + 2, y + 4);
+    doc.setFontSize(13);
+    doc.text(this.formatCurrency(data.amountRemaining), W - rm - 2, y + 4, { align: 'right' });
 
     // --- STATUS STAMP (Using Light Colors instead of Opacity) ---
     const stampX = lm + 10;

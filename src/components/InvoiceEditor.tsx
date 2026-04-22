@@ -30,13 +30,14 @@ export default function InvoiceEditor({ isOpen, onClose, initialData, onSave }: 
     const addsOnTotal = data.items.reduce((sum, item) => sum + (item.quantity * item.rate), 0);
     subtotal += addsOnTotal;
     
-    const discountAmt = (subtotal * data.discount) / 100;
+    const discountAmt = data.discount || 0;
     const total = data.overrideTotal !== undefined ? data.overrideTotal : (subtotal - discountAmt);
+    const amountRemaining = total - (data.amountPaid || 0);
 
-    if (data.subtotal !== subtotal || data.total !== total) {
-      setData(prev => ({ ...prev, subtotal, total }));
+    if (data.subtotal !== subtotal || data.total !== total || data.amountRemaining !== amountRemaining) {
+      setData(prev => ({ ...prev, subtotal, total, amountRemaining }));
     }
-  }, [data.monthlyRate, data.monthsPayingNow, data.items, data.discount, data.overrideTotal]);
+  }, [data.monthlyRate, data.monthsPayingNow, data.items, data.discount, data.overrideTotal, data.amountPaid]);
 
   const updateField = (field: keyof InvoiceData, value: any) => {
     setData(prev => ({ ...prev, [field]: value }));
@@ -378,6 +379,27 @@ export default function InvoiceEditor({ isOpen, onClose, initialData, onSave }: 
                         </div>
                       </div>
 
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <label className="text-[10px] font-bold text-zinc-400 uppercase ml-1">Discount Amount (₹)</label>
+                          <input 
+                            type="number"
+                            value={data.discount}
+                            onChange={e => updateField('discount', parseInt(e.target.value) || 0)}
+                            className="w-full bg-zinc-50 border border-zinc-100 p-4 rounded-2xl text-sm font-bold focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-[10px] font-bold text-zinc-400 uppercase ml-1">Amount Paid (₹)</label>
+                          <input 
+                            type="number"
+                            value={data.amountPaid}
+                            onChange={e => updateField('amountPaid', parseInt(e.target.value) || 0)}
+                            className="w-full bg-zinc-50 border border-zinc-100 p-4 rounded-2xl text-sm font-bold focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                          />
+                        </div>
+                      </div>
+
                       <div className="p-4 bg-orange-50/50 rounded-2xl border border-orange-100 flex items-start gap-3">
                          <Info className="w-5 h-5 text-orange-400 shrink-0 mt-1" />
                          <p className="text-[11px] text-orange-600 leading-relaxed">
@@ -581,12 +603,16 @@ export default function InvoiceEditor({ isOpen, onClose, initialData, onSave }: 
                             <span className="text-[#0f172a] font-bold">₹{data.subtotal.toLocaleString()}</span>
                          </div>
                          <div className="flex justify-between text-[9px]">
-                            <span className="text-zinc-400 font-medium text-rose-500">Discount ({data.discount}%)</span>
-                            <span className="text-rose-500 font-bold">-₹{((data.subtotal * data.discount) / 100).toLocaleString()}</span>
+                            <span className="text-zinc-400 font-medium text-rose-500">Discount</span>
+                            <span className="text-rose-500 font-bold">-₹{data.discount.toLocaleString()}</span>
+                         </div>
+                         <div className="flex justify-between text-[9px] pt-1">
+                            <span className="text-zinc-400 font-medium text-emerald-600">Amount Paid</span>
+                            <span className="text-emerald-600 font-bold">-₹{data.amountPaid.toLocaleString()}</span>
                          </div>
                          <div className="bg-[#2563eb] text-white p-3 rounded-lg flex justify-between items-center mt-4">
-                            <span className="text-[8px] font-black uppercase tracking-widest opacity-80">Total Due</span>
-                            <span className="text-sm font-black">₹{data.total.toLocaleString()}</span>
+                            <span className="text-[8px] font-black uppercase tracking-widest opacity-80">Remaining Due</span>
+                            <span className="text-sm font-black">₹{data.amountRemaining.toLocaleString()}</span>
                          </div>
                       </div>
                    </div>
