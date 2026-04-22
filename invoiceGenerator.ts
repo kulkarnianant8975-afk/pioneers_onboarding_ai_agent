@@ -190,7 +190,7 @@ export class InvoiceGenerator {
         0: { cellWidth: 'auto' },
         1: { cellWidth: 28, halign: 'left' },
         2: { cellWidth: 28, halign: 'left' },
-        3: { cellWidth: 20, halign: 'center' },
+        3: { cellWidth: 24, halign: 'center' },
         4: { cellWidth: 32, halign: 'right' }
       }
     });
