@@ -573,7 +573,7 @@ export default function InvoiceEditor({ isOpen, onClose, initialData, onSave }: 
                          <th className="text-[7px] text-zinc-400 font-black uppercase text-right py-3 px-2">Package Price</th>
                          <th className="text-[7px] text-zinc-400 font-black uppercase text-right py-3 px-2">Purchased Price</th>
                          <th className="text-[7px] text-zinc-400 font-black uppercase text-center py-3 px-2">Duration</th>
-                         <th className="text-[7px] text-zinc-400 font-black uppercase text-right py-3 px-2">Amount</th>
+                         <th className="text-[7px] text-zinc-400 font-black uppercase text-right py-3 px-2">Amount Paid</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -589,7 +589,7 @@ export default function InvoiceEditor({ isOpen, onClose, initialData, onSave }: 
                         <td className="text-center text-[10px] text-zinc-500">
                           {data.durationType === 'one-time' ? 'One-Time' : `${data.monthsPayingNow} ${data.monthsPayingNow > 1 ? 'Months' : 'Month'}`}
                         </td>
-                        <td className="text-right font-bold text-[10px] text-[#0f172a] px-2">₹{(data.agreedRate * data.monthsPayingNow).toLocaleString()}</td>
+                        <td className="text-right font-bold text-[10px] text-emerald-600 px-2">₹{data.amountPaid.toLocaleString()}</td>
                       </tr>
                     </tbody>
                   </table>

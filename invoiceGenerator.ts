@@ -139,14 +139,14 @@ export class InvoiceGenerator {
         { content: this.formatCurrency(data.monthlyRate), styles: { textColor: [148, 163, 184], textDecoration: 'lineThrough' } },
         this.formatCurrency(data.agreedRate),
         durationText,
-        { content: this.formatCurrency(data.agreedRate * data.monthsPayingNow), styles: { halign: 'right' as const, fontStyle: 'bold' as const, fontSize: 11 } }
+        { content: this.formatCurrency(data.amountPaid), styles: { halign: 'right' as const, fontStyle: 'bold' as const, fontSize: 11, textColor: [5, 150, 105] } }
       ]
     ];
 
     autoTable(doc, {
       startY: y,
       margin: { left: lm, right: rm },
-      head: [['Description', 'Package Price', 'Purchased Price', 'Duration', 'Amount']],
+      head: [['Description', 'Package Price', 'Purchased Price', 'Duration', 'Amount Paid']],
       body: tableBody,
       theme: 'grid',
       headStyles: {
