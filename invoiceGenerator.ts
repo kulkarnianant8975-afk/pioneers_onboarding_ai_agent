@@ -136,16 +136,17 @@ export class InvoiceGenerator {
     const tableBody = [
       [
         { content: periodText ? `${description}\n(${periodText})` : description, styles: { fontStyle: 'bold' as const, fontSize: 10 } },
-        this.formatCurrency(data.monthlyRate),
+        { content: this.formatCurrency(data.monthlyRate), styles: { textColor: [148, 163, 184], textDecoration: 'lineThrough' } },
+        this.formatCurrency(data.agreedRate),
         durationText,
-        { content: this.formatCurrency(data.subtotal), styles: { halign: 'right' as const, fontStyle: 'bold' as const, fontSize: 11 } }
+        { content: this.formatCurrency(data.agreedRate * data.monthsPayingNow), styles: { halign: 'right' as const, fontStyle: 'bold' as const, fontSize: 11 } }
       ]
     ];
 
     autoTable(doc, {
       startY: y,
       margin: { left: lm, right: rm },
-      head: [['Description', 'Package Price', 'Duration', 'Amount']],
+      head: [['Description', 'Package Price', 'Purchased Price', 'Duration', 'Amount']],
       body: tableBody,
       theme: 'grid',
       headStyles: {
@@ -164,9 +165,10 @@ export class InvoiceGenerator {
       },
       columnStyles: {
         0: { cellWidth: 'auto' },
-        1: { cellWidth: 42, halign: 'left' }, // Wider for INR string
-        2: { cellWidth: 28, halign: 'center' },
-        3: { cellWidth: 42, halign: 'right' }
+        1: { cellWidth: 28, halign: 'left' },
+        2: { cellWidth: 28, halign: 'left' },
+        3: { cellWidth: 20, halign: 'center' },
+        4: { cellWidth: 32, halign: 'right' }
       }
     });
 
@@ -182,11 +184,13 @@ export class InvoiceGenerator {
     doc.setTextColor(30, 41, 59);
     doc.text(this.formatCurrency(data.subtotal), W - rm - 5, y, { align: 'right' });
     
-    y += 7;
-    doc.setTextColor(100, 116, 139);
-    doc.text(`Discount:`, tx + 5, y);
-    doc.setTextColor(220, 38, 38);
-    doc.text(`-( ${this.formatCurrency(data.discount)} )`, W - rm - 5, y, { align: 'right' });
+    if (data.discount > 0) {
+      y += 7;
+      doc.setTextColor(100, 116, 139);
+      doc.text(`Discount:`, tx + 5, y);
+      doc.setTextColor(220, 38, 38);
+      doc.text(`-( ${this.formatCurrency(data.discount)} )`, W - rm - 5, y, { align: 'right' });
+    }
     
     y += 7;
     doc.setTextColor(100, 116, 139);

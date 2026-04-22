@@ -158,6 +158,7 @@ export interface InvoiceData {
   durationType: 'monthly' | 'one-time';
   pkgName: string;
   monthlyRate: number;
+  agreedRate: number;
   duration: number;
   monthsPayingNow: number;
   startMonth: number;

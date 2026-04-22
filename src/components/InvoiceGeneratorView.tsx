@@ -28,6 +28,7 @@ export default function InvoiceGeneratorView() {
     pkgName: 'Premium',
     serviceCategory: 'package',
     monthlyRate: 15000,
+    agreedRate: 15000,
     durationType: 'monthly',
     duration: 1,
     monthsPayingNow: 1,

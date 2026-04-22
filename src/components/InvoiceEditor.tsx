@@ -30,14 +30,17 @@ export default function InvoiceEditor({ isOpen, onClose, initialData, onSave }: 
     const addsOnTotal = data.items.reduce((sum, item) => sum + (item.quantity * item.rate), 0);
     subtotal += addsOnTotal;
     
-    const discountAmt = data.discount || 0;
-    const total = data.overrideTotal !== undefined ? data.overrideTotal : (subtotal - discountAmt);
+    // Discount is the difference between standard package price and purchased price
+    const calculatedDiscount = (data.monthlyRate - data.agreedRate) * data.monthsPayingNow;
+    const finalDiscount = calculatedDiscount > 0 ? calculatedDiscount : 0;
+    
+    const total = data.overrideTotal !== undefined ? data.overrideTotal : (subtotal - finalDiscount);
     const amountRemaining = total - (data.amountPaid || 0);
 
-    if (data.subtotal !== subtotal || data.total !== total || data.amountRemaining !== amountRemaining) {
-      setData(prev => ({ ...prev, subtotal, total, amountRemaining }));
+    if (data.subtotal !== subtotal || data.total !== total || data.amountRemaining !== amountRemaining || data.discount !== finalDiscount) {
+      setData(prev => ({ ...prev, subtotal, total, amountRemaining, discount: finalDiscount }));
     }
-  }, [data.monthlyRate, data.monthsPayingNow, data.items, data.discount, data.overrideTotal, data.amountPaid]);
+  }, [data.monthlyRate, data.agreedRate, data.monthsPayingNow, data.items, data.overrideTotal, data.amountPaid]);
 
   const updateField = (field: keyof InvoiceData, value: any) => {
     setData(prev => ({ ...prev, [field]: value }));
@@ -315,6 +318,7 @@ export default function InvoiceEditor({ isOpen, onClose, initialData, onSave }: 
                               onClick={() => {
                                 updateField('pkgName', opt.name);
                                 updateField('monthlyRate', opt.rate);
+                                updateField('agreedRate', opt.rate);
                               }}
                               className={`p-4 rounded-2xl border transition-all text-center ${data.pkgName === opt.name ? 'border-blue-500 bg-blue-50 ring-4 ring-blue-50' : 'border-zinc-200 bg-white hover:border-zinc-300'}`}
                             >
@@ -381,11 +385,11 @@ export default function InvoiceEditor({ isOpen, onClose, initialData, onSave }: 
 
                       <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
-                          <label className="text-[10px] font-bold text-zinc-400 uppercase ml-1">Discount Amount (₹)</label>
+                          <label className="text-[10px] font-bold text-zinc-400 uppercase ml-1">Purchased Price (₹)</label>
                           <input 
                             type="number"
-                            value={data.discount}
-                            onChange={e => updateField('discount', parseInt(e.target.value) || 0)}
+                            value={data.agreedRate}
+                            onChange={e => updateField('agreedRate', parseInt(e.target.value) || 0)}
                             className="w-full bg-zinc-50 border border-zinc-100 p-4 rounded-2xl text-sm font-bold focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                           />
                         </div>
@@ -566,8 +570,10 @@ export default function InvoiceEditor({ isOpen, onClose, initialData, onSave }: 
                     <thead>
                       <tr className="bg-zinc-50 border-y border-zinc-100">
                          <th className="text-[7px] text-zinc-400 font-black uppercase text-left py-3 px-2">Description</th>
-                         <th className="text-[7px] text-zinc-400 font-black uppercase text-center py-3 px-2">Duration</th>
                          <th className="text-[7px] text-zinc-400 font-black uppercase text-right py-3 px-2">Package Price</th>
+                         <th className="text-[7px] text-zinc-400 font-black uppercase text-right py-3 px-2">Purchased Price</th>
+                         <th className="text-[7px] text-zinc-400 font-black uppercase text-center py-3 px-2">Duration</th>
+                         <th className="text-[7px] text-zinc-400 font-black uppercase text-right py-3 px-2">Amount</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -578,10 +584,12 @@ export default function InvoiceEditor({ isOpen, onClose, initialData, onSave }: 
                           </div>
                           <div className="text-[8px] text-zinc-400 mt-1 italic leading-relaxed">Pioneers Standard Excellence</div>
                         </td>
+                        <td className="text-right font-bold text-[10px] text-zinc-400 px-2 line-through">₹{data.monthlyRate.toLocaleString()}</td>
+                        <td className="text-right font-bold text-[10px] text-[#0f172a] px-2">₹{data.agreedRate.toLocaleString()}</td>
                         <td className="text-center text-[10px] text-zinc-500">
                           {data.durationType === 'one-time' ? 'One-Time' : `${data.monthsPayingNow} ${data.monthsPayingNow > 1 ? 'Months' : 'Month'}`}
                         </td>
-                        <td className="text-right font-bold text-[10px] text-[#0f172a] px-2">₹{data.monthlyRate.toLocaleString()}</td>
+                        <td className="text-right font-bold text-[10px] text-[#0f172a] px-2">₹{(data.agreedRate * data.monthsPayingNow).toLocaleString()}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -602,10 +610,12 @@ export default function InvoiceEditor({ isOpen, onClose, initialData, onSave }: 
                             <span className="text-zinc-400 font-medium">Subtotal</span>
                             <span className="text-[#0f172a] font-bold">₹{data.subtotal.toLocaleString()}</span>
                          </div>
-                         <div className="flex justify-between text-[9px]">
-                            <span className="text-zinc-400 font-medium text-rose-500">Discount</span>
-                            <span className="text-rose-500 font-bold">-₹{data.discount.toLocaleString()}</span>
-                         </div>
+                         {data.discount > 0 && (
+                           <div className="flex justify-between text-[9px]">
+                              <span className="text-zinc-400 font-medium text-rose-500">Discount</span>
+                              <span className="text-rose-500 font-bold">-₹{data.discount.toLocaleString()}</span>
+                           </div>
+                         )}
                          <div className="flex justify-between text-[9px] pt-1">
                             <span className="text-zinc-400 font-medium text-emerald-600">Amount Paid</span>
                             <span className="text-emerald-600 font-bold">-₹{data.amountPaid.toLocaleString()}</span>
