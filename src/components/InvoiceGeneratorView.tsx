@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CreditCard, Plus, FileText, Download, Clock, CheckCircle2, AlertCircle, Sparkles, ChevronRight, LayoutDashboard, Settings as SettingsIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { InvoiceData } from '../types';
@@ -8,8 +8,20 @@ import { InvoiceGenerator } from '../../invoiceGenerator';
 export default function InvoiceGeneratorView() {
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [savedDraft, setSavedDraft] = useState<InvoiceData | null>(null);
 
-  const defaultInvoiceData: InvoiceData = {
+  useEffect(() => {
+    const draft = localStorage.getItem('invoice_draft');
+    if (draft) {
+      try {
+        setSavedDraft(JSON.parse(draft));
+      } catch (e) {
+        console.error('Failed to parse invoice draft', e);
+      }
+    }
+  }, []);
+
+  const defaultInvoiceData: InvoiceData = savedDraft || {
     invoiceNumber: `PDMA-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`,
     invoiceDate: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }),
     dueDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }),
@@ -17,7 +29,7 @@ export default function InvoiceGeneratorView() {
     clientAddress: '',
     clientEmail: '',
     clientPhone: '',
-    agencyName: 'Pioneers',
+    agencyName: 'Pioneers Digital Marketing Agency',
     agencyAddress: 'Chintamani Maharaj Mandir, Vasmat Road\nAbove Wellness Medical, Parbhani-431401',
     agencyEmail: 'pdmasolutions@gmail.com',
     agencyCEO: 'Madhav Sharma-CEO',
@@ -56,6 +68,8 @@ export default function InvoiceGeneratorView() {
       const generator = new InvoiceGenerator();
       const doc = await generator.generate(data);
       doc.save(`Invoice_${data.invoiceNumber}.pdf`);
+      localStorage.setItem('invoice_draft', JSON.stringify(data));
+      setSavedDraft(data);
       setIsEditorOpen(false);
     } catch (error) {
       console.error('Error generating invoice:', error);
